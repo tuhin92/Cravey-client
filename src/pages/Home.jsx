@@ -1,11 +1,16 @@
-import React from 'react';
+import React from "react";
+import { Helmet } from "react-helmet";
+import Banner from "../components/Home/Banner";
 
 const Home = () => {
-    return (
-        <div className='min-h-screen'>
-            <h2 className='text-4xl font-bold text-red-500'>This is home page</h2>
-        </div>
-    );
+  return (
+    <div className="min-h-screen">
+      <Helmet>
+        <title>Cravey | Home</title>
+      </Helmet>
+      <Banner/>
+    </div>
+  );
 };
 
 export default Home;
