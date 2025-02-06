@@ -4,6 +4,7 @@ import Banner from "../components/Home/Banner";
 import BestDeliveredCategory from "../components/Home/BestDeliveredCategory";
 import DeliveryBanner from "../components/Home/DeliveryBanner";
 import Serve from "../components/Home/Serve";
+import DiscountBanner from "../components/Home/DiscountBanner";
 
 const Home = () => {
   return (
@@ -15,6 +16,7 @@ const Home = () => {
       <BestDeliveredCategory/>
       <DeliveryBanner/>
       <Serve/>
+      <DiscountBanner/>
     </div>
   );
 };
