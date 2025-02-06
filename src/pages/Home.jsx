@@ -1,6 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import Banner from "../components/Home/Banner";
+import BestDeliveredCategory from "../components/Home/BestDeliveredCategory";
 
 const Home = () => {
   return (
@@ -9,6 +10,7 @@ const Home = () => {
         <title>Cravey | Home</title>
       </Helmet>
       <Banner/>
+      <BestDeliveredCategory/>
     </div>
   );
 };
