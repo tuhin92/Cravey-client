@@ -3,11 +3,14 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { Search, ShoppingCart } from "lucide-react"
+import Swal from "sweetalert2"
 
 const Shop = () => {
   const [products, setProducts] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
+  const [cart, setCart] = useState([])
 
+  // Fetch products from API
   useEffect(() => {
     fetch("http://localhost:5000/add-product")
       .then((res) => res.json())
@@ -15,6 +18,41 @@ const Shop = () => {
       .catch((error) => console.error("Error fetching products:", error))
   }, [])
 
+  // Load cart items from localStorage
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || []
+    setCart(storedCart)
+  }, [])
+
+  // Add item to cart with SweetAlert
+  const addToCart = (product) => {
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || []
+    const isAlreadyInCart = existingCart.some((item) => item._id === product._id)
+
+    if (isAlreadyInCart) {
+      Swal.fire({
+        icon: "warning",
+        title: "Already Added!",
+        text: "This product is already in your cart.",
+        showConfirmButton: false,
+        timer: 1500
+      })
+    } else {
+      const updatedCart = [...existingCart, product]
+      setCart(updatedCart)
+      localStorage.setItem("cart", JSON.stringify(updatedCart))
+
+      Swal.fire({
+        icon: "success",
+        title: "Added to Cart!",
+        text: `${product.productName} has been added to your cart.`,
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+  }
+
+  // Filter products based on search term
   const filteredProducts = products.filter((product) =>
     product.productName.toLowerCase().includes(searchTerm.toLowerCase()),
   )
@@ -47,7 +85,7 @@ const Shop = () => {
           {filteredProducts.map((product) => (
             <div
               key={product._id}
-              className="card bg-white shadow-md hover:shadow-xl transition-shadow duration-300 p-3 sm:p-4 rounded-lg border max-h-[400px] flex flex-col"
+              className="card bg-white shadow-md hover:shadow-xl transition-shadow duration-300 p-3 sm:p-4 rounded-lg border flex flex-col"
             >
               <figure className="relative w-full h-36 sm:h-48 mb-3">
                 <img
@@ -63,7 +101,10 @@ const Shop = () => {
 
                 {/* Buttons */}
                 <div className="flex flex-col sm:flex-row justify-between mt-2 gap-2">
-                  <button className="btn bg-[#0393B7] text-white w-full sm:w-auto text-sm py-2 px-4 rounded">
+                  <button 
+                    className="btn bg-[#0393B7] text-white w-full sm:w-auto text-sm py-2 px-4 rounded"
+                    onClick={() => addToCart(product)}
+                  >
                     Add to Cart
                   </button>
                   <Link
@@ -83,4 +124,3 @@ const Shop = () => {
 }
 
 export default Shop
-

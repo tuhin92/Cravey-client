@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import DashboardLayout from "./pages/Dashboard/Layout/DashboardLayout";
 import Products from "./pages/Dashboard/Products/Products";
 import ManageOrders from "./pages/Dashboard/Manage Orders/ManageOrders";
+import Cart from "./pages/Cart";
 
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));
@@ -25,6 +26,7 @@ root.render(
           <Route path="shop" element={<Shop />} />
           <Route path="services" element={<Services />} />
           <Route path="about" element={<About />} />
+          <Route path="cart" element={<Cart />} />
         </Route>
 
         {/* Dashboard Layout (without navbar & footer) */}
