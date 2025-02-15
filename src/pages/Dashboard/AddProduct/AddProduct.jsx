@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Swal from 'sweetalert2';
 
 const AddProduct = () => {
   const [productName, setProductName] = useState("");
@@ -33,6 +34,26 @@ const AddProduct = () => {
     // Log or handle the product data (send to API, etc.)
     console.log(productData);
 
+    // send the data to the API
+    fetch("http://localhost:5000/add-product", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(productData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("Success:", data);
+        if (data.insertedId) {
+          Swal.fire({
+            title: "Product Added!",
+            icon: "success",
+            draggable: true,
+          });
+        }
+      });
+
     // Reset form or give feedback (optional)
     setProductName("");
     setBrandName("");
@@ -45,11 +66,15 @@ const AddProduct = () => {
 
   return (
     <div className="max-w-lg mx-auto bg-white shadow-lg p-8 rounded-lg border border-gray-200">
-      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Add Product</h2>
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+        Add Product
+      </h2>
       <form className="space-y-5" onSubmit={handleSubmit}>
         {/* Product Name */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-1">Product Name</label>
+          <label className="block text-gray-700 font-semibold mb-1">
+            Product Name
+          </label>
           <input
             type="text"
             className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -62,7 +87,9 @@ const AddProduct = () => {
 
         {/* Brand Name */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-1">Brand Name</label>
+          <label className="block text-gray-700 font-semibold mb-1">
+            Brand Name
+          </label>
           <input
             type="text"
             className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -75,7 +102,9 @@ const AddProduct = () => {
 
         {/* Category */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-1">Category</label>
+          <label className="block text-gray-700 font-semibold mb-1">
+            Category
+          </label>
           <select
             className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={category}
@@ -84,6 +113,7 @@ const AddProduct = () => {
           >
             <option value="">Select Category</option>
             <option value="electronics">Electronics</option>
+            <option value="drinks">Drinks</option>
             <option value="fashion">Fashion</option>
             <option value="home-appliances">Home Appliances</option>
             <option value="beauty">Beauty & Health</option>
@@ -96,7 +126,9 @@ const AddProduct = () => {
 
         {/* Description */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-1">Description</label>
+          <label className="block text-gray-700 font-semibold mb-1">
+            Description
+          </label>
           <textarea
             className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter product description"
@@ -109,7 +141,9 @@ const AddProduct = () => {
 
         {/* Price */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-1">Price ($)</label>
+          <label className="block text-gray-700 font-semibold mb-1">
+            Price ($)
+          </label>
           <input
             type="number"
             className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -122,7 +156,9 @@ const AddProduct = () => {
 
         {/* Availability Status */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-1">Availability</label>
+          <label className="block text-gray-700 font-semibold mb-1">
+            Availability
+          </label>
           <select
             className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={availability}
@@ -137,7 +173,9 @@ const AddProduct = () => {
 
         {/* Product Image URL */}
         <div>
-          <label className="block text-gray-700 font-semibold mb-1">Product Image URL</label>
+          <label className="block text-gray-700 font-semibold mb-1">
+            Product Image URL
+          </label>
           <input
             type="url"
             className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
