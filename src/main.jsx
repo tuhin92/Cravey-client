@@ -9,7 +9,7 @@ import Shop from "./pages/Shop";
 import Services from "./pages/Services";
 import AddProduct from "./pages/Dashboard/AddProduct";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import DashboardLayout from "./layout/DashboardLayout";
+import DashboardLayout from "./pages/Dashboard/Layout/DashboardLayout";
 import UpdateProducts from "./pages/Dashboard/UpdateProducts";
 import DeleteProducts from "./pages/Dashboard/DeleteProducts";
 
