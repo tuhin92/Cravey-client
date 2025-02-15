@@ -10,6 +10,8 @@ import Services from "./pages/Services";
 import AddProduct from "./pages/Dashboard/AddProduct";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import DashboardLayout from "./layout/DashboardLayout";
+import UpdateProducts from "./pages/Dashboard/UpdateProducts";
+import DeleteProducts from "./pages/Dashboard/DeleteProducts";
 
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));
@@ -29,6 +31,8 @@ root.render(
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="add-product" element={<AddProduct />} />
+          <Route path="update-product" element={<UpdateProducts />} />
+          <Route path="delete-product" element={<DeleteProducts/>} />
         </Route>
       </Routes>
     </BrowserRouter>
