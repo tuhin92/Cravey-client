@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Pencil, Trash2 } from "lucide-react"; // Import icons
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -12,6 +13,28 @@ const Products = () => {
       })
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
+
+  const handleEdit = (id) => {
+    console.log("Edit product:", id);
+    // Implement edit functionality
+  };
+
+  const handleDelete = (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete?");
+    if (confirmDelete) {
+      fetch(`http://localhost:5000/delete-product/${id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.deletedCount > 0) {
+            alert("Product deleted successfully!");
+            setProducts(products.filter((product) => product._id !== id));
+          }
+        })
+        .catch((error) => console.error("Error deleting product:", error));
+    }
+  };
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -29,6 +52,7 @@ const Products = () => {
                 <th className="py-3 px-6 text-left">Category</th>
                 <th className="py-3 px-6 text-left">Price ($)</th>
                 <th className="py-3 px-6 text-left">Availability</th>
+                <th className="py-3 px-6 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -54,6 +78,20 @@ const Products = () => {
                     }`}
                   >
                     {product.availability.replace("-", " ")}
+                  </td>
+                  <td className="py-3 px-6 text-center flex justify-center gap-4">
+                    <button
+                      onClick={() => handleEdit(product._id)}
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      <Pencil size={20} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(product._id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 size={20} />
+                    </button>
                   </td>
                 </tr>
               ))}
