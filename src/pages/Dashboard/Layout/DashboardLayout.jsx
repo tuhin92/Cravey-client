@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { Home, ShoppingCart, PlusSquare, Edit, Trash2, Users, Settings, LogOut, Menu, X, Image } from "lucide-react";
+import { Home, ShoppingCart, PlusSquare, Edit, Trash2, Users, Settings, LogOut, Menu, X, Image, ClipboardList } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const DashboardLayout = () => {
@@ -60,8 +60,7 @@ const DashboardLayout = () => {
             <NavItem to="/dashboard" icon={<Home size={20} />} label="Dashboard" collapsed={collapsed} />
             <NavItem to="/dashboard/products" icon={<ShoppingCart size={20} />} label="Products" collapsed={collapsed} />
             <NavItem to="/dashboard/add-product" icon={<PlusSquare size={20} />} label="Add Product" collapsed={collapsed} />
-            <NavItem to="/dashboard/update-product" icon={<Edit size={20} />} label="Update Product" collapsed={collapsed} />
-            <NavItem to="/dashboard/delete-product" icon={<Trash2 size={20} />} label="Delete Product" collapsed={collapsed} />
+            <NavItem to="/dashboard/manage-orders" icon={<ClipboardList size={20} />} label="Manage Orders" collapsed={collapsed} />
             <NavItem to="/dashboard/users" icon={<Users size={20} />} label="Users" collapsed={collapsed} />
             <NavItem to="/dashboard/settings" icon={<Settings size={20} />} label="Settings" collapsed={collapsed} />
           </ul>
