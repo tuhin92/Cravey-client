@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { Search, ShoppingCart } from "lucide-react"
 
 const Shop = () => {
   const [products, setProducts] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     fetch("http://localhost:5000/add-product")
@@ -13,15 +15,36 @@ const Shop = () => {
       .catch((error) => console.error("Error fetching products:", error))
   }, [])
 
+  const filteredProducts = products.filter((product) =>
+    product.productName.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
+
   return (
     <div className="min-h-screen max-w-7xl mx-auto p-4 sm:p-6">
-      <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-gray-800">Shop</h2>
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-0">Shop</h2>
+        <div className="flex items-center w-full sm:w-auto">
+          <div className="relative flex-grow mr-2">
+            <input
+              type="text"
+              placeholder="Search products..."
+              className="w-full p-2 pl-10 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0393B7]"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          </div>
+          <Link to="/cart" className="p-2 bg-[#0393B7] text-white rounded-lg hover:bg-[#0381A1] transition-colors">
+            <ShoppingCart size={24} />
+          </Link>
+        </div>
+      </div>
 
-      {products.length === 0 ? (
+      {filteredProducts.length === 0 ? (
         <p className="text-center text-gray-500">No products available.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <div
               key={product._id}
               className="card bg-white shadow-md hover:shadow-xl transition-shadow duration-300 p-3 sm:p-4 rounded-lg border max-h-[400px] flex flex-col"
