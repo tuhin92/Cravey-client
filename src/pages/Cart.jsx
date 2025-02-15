@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import Swal from "sweetalert2"
 
 const Cart = () => {
   const [cart, setCart] = useState([])
@@ -9,13 +10,22 @@ const Cart = () => {
     setCart(storedCart)
   }, [])
 
-  // Remove item from cart
+  // Remove item from cart with SweetAlert
   const handleRemoveFromCart = (productId) => {
     const updatedCart = cart.filter((product) => product._id !== productId)
-    
+
     // Update state and localStorage
     setCart(updatedCart)
     localStorage.setItem("cart", JSON.stringify(updatedCart))
+
+    // Show success alert
+    Swal.fire({
+      icon: "success",
+      title: "Removed!",
+      text: "The product has been removed from your cart.",
+      showConfirmButton: false,
+      timer: 1500
+    })
   }
 
   return (
