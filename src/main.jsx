@@ -33,8 +33,8 @@ root.render(
           <Route index element={<Dashboard />} />
           <Route path="add-product" element={<AddProduct />} />
           <Route path="update-product" element={<UpdateProducts />} />
-          <Route path="delete-product" element={<DeleteProducts/>} />
-          <Route path="products" element={<Products/>} />
+          <Route path="delete-product" element={<DeleteProducts />} />
+          <Route path="products" element={<Products />} />
         </Route>
       </Routes>
     </BrowserRouter>
