@@ -10,21 +10,57 @@ const Cart = () => {
     setCart(storedCart)
   }, [])
 
-  // Remove item from cart with SweetAlert
-  const handleRemoveFromCart = (productId) => {
-    const updatedCart = cart.filter((product) => product._id !== productId)
-
-    // Update state and localStorage
-    setCart(updatedCart)
-    localStorage.setItem("cart", JSON.stringify(updatedCart))
-
-    // Show success alert
+  // Remove item from cart (with confirmation alert)
+  const handleRemoveFromCart = (productId, productName) => {
     Swal.fire({
-      icon: "success",
-      title: "Removed!",
-      text: "The product has been removed from your cart.",
-      showConfirmButton: false,
-      timer: 1500
+      title: "Are you sure?",
+      text: `Do you want to remove "${productName}" from the cart?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, Remove it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedCart = cart.filter((product) => product._id !== productId)
+        setCart(updatedCart)
+        localStorage.setItem("cart", JSON.stringify(updatedCart))
+
+        Swal.fire({
+          icon: "success",
+          title: "Removed!",
+          text: `"${productName}" has been removed from your cart.`,
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    })
+  }
+
+  // Handle individual order
+  const handleOrderNow = (product) => {
+    Swal.fire({
+      title: "Confirm Order",
+      text: `Do you want to order "${product.productName}"?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#0393B7",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Order Now!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedCart = cart.filter((p) => p._id !== product._id)
+        setCart(updatedCart)
+        localStorage.setItem("cart", JSON.stringify(updatedCart))
+
+        Swal.fire({
+          icon: "success",
+          title: "Order Placed!",
+          text: `"${product.productName}" has been ordered successfully.`,
+          showConfirmButton: false,
+          timer: 2000
+        })
+      }
     })
   }
 
@@ -53,13 +89,23 @@ const Cart = () => {
                 <p className="text-sm text-gray-500">{product.category}</p>
                 <p className="text-lg font-bold text-green-600 mt-1">${product.price}</p>
 
-                {/* Remove Button */}
-                <button
-                  className="btn btn-error text-white w-full text-sm py-2 px-4 rounded mt-3"
-                  onClick={() => handleRemoveFromCart(product._id)}
-                >
-                  Remove from Cart
-                </button>
+                <div>
+                  {/* Order Now Button */}
+                  <button
+                    className="btn bg-[#0393B7] text-white w-full text-sm py-2 px-4 rounded mt-2"
+                    onClick={() => handleOrderNow(product)}
+                  >
+                    Order Now
+                  </button>
+
+                  {/* Remove Button (with confirmation) */}
+                  <button
+                    className="btn btn-error text-white w-full text-sm py-2 px-4 rounded mt-2"
+                    onClick={() => handleRemoveFromCart(product._id, product.productName)}
+                  >
+                    Remove from Cart
+                  </button>
+                </div>
               </div>
             </div>
           ))}
