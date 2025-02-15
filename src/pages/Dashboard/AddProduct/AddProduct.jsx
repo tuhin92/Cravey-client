@@ -112,15 +112,15 @@ const AddProduct = () => {
             required
           >
             <option value="">Select Category</option>
-            <option value="electronics">Electronics</option>
+            <option value="fruits">Fruits</option>
             <option value="drinks">Drinks</option>
-            <option value="fashion">Fashion</option>
-            <option value="home-appliances">Home Appliances</option>
-            <option value="beauty">Beauty & Health</option>
-            <option value="sports">Sports & Outdoors</option>
-            <option value="books">Books</option>
-            <option value="toys">Toys</option>
-            <option value="automobile">Automobile</option>
+            <option value="vegetables">Vegetables</option>
+            <option value="snacks">Snacks</option>
+            <option value="dairy">Dairy</option>
+            <option value="meat">Meat</option>
+            <option value="seafood">Seafood</option>
+            <option value="beverages">Beverages</option>
+            <option value="sweets">Sweets</option>
           </select>
         </div>
 
