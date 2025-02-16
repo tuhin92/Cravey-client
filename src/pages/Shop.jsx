@@ -108,7 +108,7 @@ const Shop = () => {
                     Add to Cart
                   </button>
                   <Link
-                    to={`/product/${product._id}`}
+                    to={`/product-info/${product._id}`}
                     className="btn btn-outline btn-accent w-full sm:w-auto text-sm py-2 px-4 rounded text-center"
                   >
                     View Details
