@@ -77,10 +77,10 @@ const Product_info = () => {
     <div className="min-h-screen bg-gray-50 py-6">
       <div className="max-w-3xl mx-auto px-4">
         <Link
-          to="/"
+          to="/shop"
           className="text-blue-500 hover:text-blue-700 flex items-center mb-4 transition duration-300 ease-in-out"
         >
-          <ArrowLeft className="mr-2" size={18} /> Back to Products
+          <ArrowLeft className="mr-2" size={18} /> Back to Shop
         </Link>
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
