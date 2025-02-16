@@ -9,22 +9,27 @@ const Shop = () => {
   const [products, setProducts] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [cart, setCart] = useState([])
+  const [loading, setLoading] = useState(true) // Added loading state
 
-  // Fetch products from API
   useEffect(() => {
+    setLoading(true)
     fetch("http://localhost:5000/add-product")
       .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.error("Error fetching products:", error))
+      .then((data) => {
+        setProducts(data)
+        setLoading(false) // Stop loading after data is fetched
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error)
+        setLoading(false) // Stop loading even if there's an error
+      })
   }, [])
 
-  // Load cart items from localStorage
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || []
     setCart(storedCart)
   }, [])
 
-  // Add item to cart with SweetAlert
   const addToCart = (product) => {
     const existingCart = JSON.parse(localStorage.getItem("cart")) || []
     const isAlreadyInCart = existingCart.some((item) => item._id === product._id)
@@ -52,7 +57,6 @@ const Shop = () => {
     }
   }
 
-  // Filter products based on search term
   const filteredProducts = products.filter((product) =>
     product.productName.toLowerCase().includes(searchTerm.toLowerCase()),
   )
@@ -78,7 +82,12 @@ const Shop = () => {
         </div>
       </div>
 
-      {filteredProducts.length === 0 ? (
+      {/* Show Loader While Fetching Data */}
+      {loading ? (
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      ) : filteredProducts.length === 0 ? (
         <p className="text-center text-gray-500">No products available.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -99,7 +108,6 @@ const Shop = () => {
                 <p className="text-sm text-gray-500">{product.category}</p>
                 <p className="text-lg font-bold text-green-600 mt-1">${product.price}</p>
 
-                {/* Buttons */}
                 <div className="flex flex-col sm:flex-row justify-between mt-2 gap-2">
                   <button 
                     className="btn bg-[#0393B7] text-white w-full sm:w-auto text-sm py-2 px-4 rounded"
