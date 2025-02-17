@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Swal from 'sweetalert2';
+import HelmetWrapper from "../../../components/HelmetWrapper";
 
 const AddProduct = () => {
   const [productName, setProductName] = useState("");
@@ -66,6 +67,7 @@ const AddProduct = () => {
 
   return (
     <div className="max-w-lg mx-auto bg-white shadow-lg p-8 rounded-lg border border-gray-200">
+      <HelmetWrapper title="Cravey | Dashboard-Add-roduct" />
       <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
         Add Product
       </h2>

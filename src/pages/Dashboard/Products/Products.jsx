@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Pencil, Trash2 } from "lucide-react"; // Import icons
+import HelmetWrapper from "../../../components/HelmetWrapper";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -38,6 +39,7 @@ const Products = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
+      <HelmetWrapper title="Cravey | Dashboard-Products" />
       <h2 className="text-3xl font-bold mb-6 text-center">All Products</h2>
 
       {products.length === 0 ? (
