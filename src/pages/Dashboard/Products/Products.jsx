@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Pencil, Trash2 } from "lucide-react"; // Import icons
+import { Pencil, Trash2 } from "lucide-react";
 import HelmetWrapper from "../../../components/HelmetWrapper";
+import Swal from "sweetalert2";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -10,31 +11,38 @@ const Products = () => {
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
-        console.log(data);
       })
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
   const handleEdit = (id) => {
     console.log("Edit product:", id);
-    // Implement edit functionality
   };
 
   const handleDelete = (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete?");
-    if (confirmDelete) {
-      fetch(`http://localhost:5000/delete-product/${id}`, {
-        method: "DELETE",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.deletedCount > 0) {
-            alert("Product deleted successfully!");
-            setProducts(products.filter((product) => product._id !== id));
-          }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to Delete!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:5000/add-product/${id}`, {
+          method: "DELETE",
         })
-        .catch((error) => console.error("Error deleting product:", error));
-    }
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.deletedCount > 0) {
+              setProducts(products.filter((product) => product._id !== id));
+              Swal.fire("Deleted!", "Your product has been deleted.", "success");
+            }
+          })
+          .catch((error) => console.error("Error deleting product:", error));
+      }
+    });
   };
 
   return (
