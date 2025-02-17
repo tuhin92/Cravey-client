@@ -1,15 +1,68 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, ShoppingCart } from "lucide-react";
+import { Search, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import Swal from "sweetalert2";
 import HelmetWrapper from "../../components/HelmetWrapper";
+
+const ProductCard = ({ product, onAddToCart }) => {
+  const { productName, brandName, category, price, imageUrl, _id } = product;
+
+  return (
+    <div className="group relative overflow-hidden rounded-xl bg-white transition-all duration-300 hover:shadow-xl border border-gray-200">
+      {/* Image Container */}
+      <div className="p-4">
+        <div className="relative h-48 w-full overflow-hidden rounded-lg bg-gray-50">
+          <img
+            src={imageUrl || "/placeholder.svg"}
+            alt={productName}
+            className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4 pt-0">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+            {category}
+          </span>
+          <span className="text-lg font-bold text-green-600">${price}</span>
+        </div>
+
+        <h3 className="mb-1 text-lg font-semibold text-gray-800 truncate">
+          {productName}
+        </h3>
+        <p className="text-sm text-gray-500 mb-4">{brandName}</p>
+
+        {/* Buttons */}
+        <div className="grid grid-cols-2 gap-2">
+          <button 
+            onClick={() => onAddToCart(product)}
+            className="btn bg-[#0393B7] text-white hover:bg-[#0381A1] w-full text-sm py-2 px-4 rounded-lg"
+          >
+            Add to Cart
+          </button>
+          
+          <Link
+            to={`/product-info/${_id}`}
+            className="btn btn-outline btn-accent w-full text-sm py-2 px-4 rounded-lg text-center border border-[#0393B7] text-[#0393B7] hover:bg-[#0393B7] hover:text-white"
+          >
+            View Details
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all"); // New state for filtering
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   useEffect(() => {
     setLoading(true);
@@ -29,6 +82,11 @@ const Shop = () => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(storedCart);
   }, []);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, categoryFilter]);
 
   const addToCart = (product) => {
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -57,11 +115,21 @@ const Shop = () => {
     }
   };
 
-  // Filtering products based on search term and selected category
   const filteredProducts = products.filter((product) =>
     product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (categoryFilter === "all" || product.category === categoryFilter)
   );
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="min-h-screen max-w-7xl mx-auto p-4 sm:p-6">
@@ -101,57 +169,70 @@ const Shop = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           </div>
 
-          {/* Cart Button */}
+          {/* Cart Link */}
           <Link to="/cart" className="p-2 bg-[#0393B7] text-white rounded-lg hover:bg-[#0381A1] transition-colors">
             <ShoppingCart size={24} />
           </Link>
         </div>
       </div>
 
-      {/* Show Loader While Fetching Data */}
+      {/* Loading State */}
       {loading ? (
-        <div className="flex justify-center items-center min-h-screen">
-          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="flex justify-center items-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#0393B7]"></div>
         </div>
       ) : filteredProducts.length === 0 ? (
-        <p className="text-center text-gray-500">No products available.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {filteredProducts.map((product) => (
-            <div
-              key={product._id}
-              className="card bg-white shadow-md hover:shadow-xl transition-shadow duration-300 p-3 sm:p-4 rounded-lg border flex flex-col"
-            >
-              <figure className="relative w-full h-36 sm:h-48 mb-3">
-                <img
-                  src={product.imageUrl || "/placeholder.svg"}
-                  alt={product.productName}
-                  className="w-full h-full object-contain rounded-lg"
-                />
-              </figure>
-              <div className="card-body p-2 sm:p-4 flex-grow">
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 truncate">{product.productName}</h3>
-                <p className="text-sm text-gray-500">{product.category}</p>
-                <p className="text-lg font-bold text-green-600 mt-1">${product.price}</p>
-
-                <div className="flex flex-col sm:flex-row justify-between mt-2 gap-2">
-                  <button 
-                    className="btn bg-[#0393B7] text-white w-full sm:w-auto text-sm py-2 px-4 rounded"
-                    onClick={() => addToCart(product)}
-                  >
-                    Add to Cart
-                  </button>
-                  <Link
-                    to={`/product-info/${product._id}`}
-                    className="btn btn-outline btn-accent w-full sm:w-auto text-sm py-2 px-4 rounded text-center"
-                  >
-                    View Details
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="flex flex-col items-center justify-center min-h-[400px] text-gray-500">
+          <p className="text-lg">No products available.</p>
+          <p className="text-sm mt-2">Try adjusting your search or filter criteria.</p>
         </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {currentProducts.map((product) => (
+              <ProductCard
+                key={product._id}
+                product={product}
+                onAddToCart={addToCart}
+              />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center mt-8 gap-2">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              
+              {[...Array(totalPages)].map((_, index) => (
+                <button
+                  key={index + 1}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={`px-4 py-2 rounded-lg ${
+                    currentPage === index + 1
+                      ? 'bg-[#0393B7] text-white'
+                      : 'border border-gray-300 hover:bg-gray-100'
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+              
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
