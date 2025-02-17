@@ -14,12 +14,15 @@ import Products from "./pages/Dashboard/Products/Products";
 import ManageOrders from "./pages/Dashboard/Manage Orders/ManageOrders";
 import Cart from "./pages/Cart";
 import Product_info from "./pages/Product_info";
+import { Scroll } from "lucide-react";
+import ScrollToTop from "./ScrollToTop";
 
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
     <BrowserRouter>
+    <ScrollToTop />
       <Routes>
         {/* Main website layout (with navbar & footer) */}
         <Route path="/" element={<Main />}>
