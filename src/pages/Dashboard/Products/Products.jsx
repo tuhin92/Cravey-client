@@ -5,6 +5,8 @@ import Swal from "sweetalert2";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 6;
 
   useEffect(() => {
     fetch("http://localhost:5000/add-product")
@@ -45,6 +47,12 @@ const Products = () => {
     });
   };
 
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="max-w-6xl mx-auto p-6">
       <HelmetWrapper title="Cravey | Dashboard-Products" />
@@ -66,7 +74,7 @@ const Products = () => {
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {currentProducts.map((product) => (
                 <tr key={product._id} className="border-t">
                   <td className="py-3 px-6">
                     <img
@@ -107,6 +115,17 @@ const Products = () => {
               ))}
             </tbody>
           </table>
+          <div className="flex justify-center mt-4">
+            {Array.from({ length: Math.ceil(products.length / productsPerPage) }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => paginate(i + 1)}
+                className={`mx-1 px-3 py-1 border rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>
