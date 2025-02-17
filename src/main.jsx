@@ -15,7 +15,7 @@ import ManageOrders from "./pages/Dashboard/Manage Orders/ManageOrders";
 import Cart from "./pages/Cart";
 import Product_info from "./pages/Product_info";
 import { Scroll } from "lucide-react";
-import ScrollToTop from "./ScrollToTop";
+import ScrollToTop from "./components/ScrollToTop";
 
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));

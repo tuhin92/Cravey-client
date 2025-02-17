@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import Swal from "sweetalert2"
+import HelmetWrapper from "../components/HelmetWrapper"
 
 const Cart = () => {
   const [cart, setCart] = useState([])
@@ -66,6 +67,7 @@ const Cart = () => {
 
   return (
     <div className="min-h-screen max-w-7xl mx-auto p-4 sm:p-6">
+      <HelmetWrapper title="Cravey | Cart" />
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">Shopping Cart</h2>
 
       {cart.length === 0 ? (
