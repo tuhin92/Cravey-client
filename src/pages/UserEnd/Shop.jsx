@@ -1,39 +1,38 @@
-"use client"
-
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import { Search, ShoppingCart } from "lucide-react"
-import Swal from "sweetalert2"
-import HelmetWrapper from "../../components/HelmetWrapper"
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Search, ShoppingCart } from "lucide-react";
+import Swal from "sweetalert2";
+import HelmetWrapper from "../../components/HelmetWrapper";
 
 const Shop = () => {
-  const [products, setProducts] = useState([])
-  const [searchTerm, setSearchTerm] = useState("")
-  const [cart, setCart] = useState([])
-  const [loading, setLoading] = useState(true) // Added loading state
+  const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all"); // New state for filtering
+  const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     fetch("http://localhost:5000/add-product")
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data)
-        setLoading(false) // Stop loading after data is fetched
+        setProducts(data);
+        setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching products:", error)
-        setLoading(false) // Stop loading even if there's an error
-      })
-  }, [])
+        console.error("Error fetching products:", error);
+        setLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || []
-    setCart(storedCart)
-  }, [])
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCart(storedCart);
+  }, []);
 
   const addToCart = (product) => {
-    const existingCart = JSON.parse(localStorage.getItem("cart")) || []
-    const isAlreadyInCart = existingCart.some((item) => item._id === product._id)
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const isAlreadyInCart = existingCart.some((item) => item._id === product._id);
 
     if (isAlreadyInCart) {
       Swal.fire({
@@ -41,35 +40,57 @@ const Shop = () => {
         title: "Already Added!",
         text: "This product is already in your cart.",
         showConfirmButton: false,
-        timer: 1500
-      })
+        timer: 1500,
+      });
     } else {
-      const updatedCart = [...existingCart, product]
-      setCart(updatedCart)
-      localStorage.setItem("cart", JSON.stringify(updatedCart))
+      const updatedCart = [...existingCart, product];
+      setCart(updatedCart);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
 
       Swal.fire({
         icon: "success",
         title: "Added to Cart!",
         text: `${product.productName} has been added to your cart.`,
         showConfirmButton: false,
-        timer: 1500
-      })
+        timer: 1500,
+      });
     }
-  }
+  };
 
+  // Filtering products based on search term and selected category
   const filteredProducts = products.filter((product) =>
-    product.productName.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+    product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (categoryFilter === "all" || product.category === categoryFilter)
+  );
 
   return (
-    
     <div className="min-h-screen max-w-7xl mx-auto p-4 sm:p-6">
       <HelmetWrapper title="Cravey | Shop" />
+      
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-0">Shop</h2>
-        <div className="flex items-center w-full sm:w-auto">
-          <div className="relative flex-grow mr-2">
+        
+        <div className="flex items-center w-full sm:w-auto gap-2">
+          {/* Category Filter Dropdown */}
+          <select
+            className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0393B7]"
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+          >
+            <option value="all">All Categories</option>
+            <option value="fruits">Fruits</option>
+            <option value="drinks">Drinks</option>
+            <option value="vegetables">Vegetables</option>
+            <option value="snacks">Snacks</option>
+            <option value="dairy">Dairy</option>
+            <option value="meat">Meat</option>
+            <option value="seafood">Seafood</option>
+            <option value="beverages">Beverages</option>
+            <option value="sweets">Sweets</option>
+          </select>
+
+          {/* Search Input */}
+          <div className="relative flex-grow">
             <input
               type="text"
               placeholder="Search products..."
@@ -79,6 +100,8 @@ const Shop = () => {
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           </div>
+
+          {/* Cart Button */}
           <Link to="/cart" className="p-2 bg-[#0393B7] text-white rounded-lg hover:bg-[#0381A1] transition-colors">
             <ShoppingCart size={24} />
           </Link>
@@ -131,7 +154,7 @@ const Shop = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Shop
+export default Shop;
