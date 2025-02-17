@@ -16,6 +16,7 @@ import Shop from "./pages/UserEnd/Shop";
 import Services from "./pages/UserEnd/Services";
 import Cart from "./pages/UserEnd/Cart";
 import Product_info from "./pages/UserEnd/Product_info";
+import Update from "./pages/Dashboard/UpdateProduct/Update";
 
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));
@@ -40,6 +41,7 @@ root.render(
           <Route path="add-product" element={<AddProduct />} />
           <Route path="products" element={<Products />} />
           <Route path="manage-orders" element={<ManageOrders />} />
+          <Route path="update-product/:id" element={<Update />} />
         </Route>
       </Routes>
     </BrowserRouter>
