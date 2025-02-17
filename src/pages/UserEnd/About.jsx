@@ -1,5 +1,5 @@
 import React from "react";
-import HelmetWrapper from "../components/HelmetWrapper";
+import HelmetWrapper from "../../components/HelmetWrapper";
 
 const About = () => {
   return (

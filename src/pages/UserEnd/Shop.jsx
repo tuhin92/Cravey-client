@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { Search, ShoppingCart } from "lucide-react"
 import Swal from "sweetalert2"
-import HelmetWrapper from "../components/HelmetWrapper"
+import HelmetWrapper from "../../components/HelmetWrapper"
 
 const Shop = () => {
   const [products, setProducts] = useState([])

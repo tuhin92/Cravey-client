@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { ArrowLeft, ShoppingCart, Heart, CheckCircle, XCircle } from "lucide-react"
-import HelmetWrapper from "../components/HelmetWrapper"
+import HelmetWrapper from "../../components/HelmetWrapper"
 
 const Product_info = () => {
   const [product, setProduct] = useState(null)

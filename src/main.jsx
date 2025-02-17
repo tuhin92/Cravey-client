@@ -3,19 +3,19 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import Main from "./layout/Main";
-import About from "./pages/About";
-import Home from "./pages/Home";
-import Shop from "./pages/Shop";
-import Services from "./pages/Services";
 import AddProduct from "./pages/Dashboard/AddProduct/AddProduct";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import DashboardLayout from "./pages/Dashboard/Layout/DashboardLayout";
 import Products from "./pages/Dashboard/Products/Products";
 import ManageOrders from "./pages/Dashboard/Manage Orders/ManageOrders";
-import Cart from "./pages/Cart";
-import Product_info from "./pages/Product_info";
 import { Scroll } from "lucide-react";
 import ScrollToTop from "./components/ScrollToTop";
+import About from "./pages/UserEnd/About";
+import Home from "./pages/UserEnd/Home";
+import Shop from "./pages/UserEnd/Shop";
+import Services from "./pages/UserEnd/Services";
+import Cart from "./pages/UserEnd/Cart";
+import Product_info from "./pages/UserEnd/Product_info";
 
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));

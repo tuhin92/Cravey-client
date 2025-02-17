@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import Swal from "sweetalert2"
-import HelmetWrapper from "../components/HelmetWrapper"
+import HelmetWrapper from "../../components/HelmetWrapper"
 
 const Cart = () => {
   const [cart, setCart] = useState([])
