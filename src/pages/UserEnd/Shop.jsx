@@ -115,10 +115,13 @@ const Shop = () => {
     }
   };
 
-  const filteredProducts = products.filter((product) =>
-    product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (categoryFilter === "all" || product.category === categoryFilter)
-  );
+  const filteredProducts = products.filter((product) => {
+    const nameMatch = product.productName.toLowerCase().includes(searchTerm.toLowerCase());
+    const categoryMatch = categoryFilter === "all" || 
+      product.category.toLowerCase() === categoryFilter.toLowerCase();
+    
+    return nameMatch && categoryMatch;
+  });
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
