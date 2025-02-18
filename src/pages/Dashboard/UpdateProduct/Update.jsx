@@ -148,15 +148,15 @@ const UpdateProduct = () => {
                   required
                 >
                   <option value="">Select Category</option>
-                  <option value="fruits">Fruits</option>
-                  <option value="drinks">Drinks</option>
-                  <option value="vegetables">Vegetables</option>
-                  <option value="snacks">Snacks</option>
-                  <option value="dairy">Dairy</option>
-                  <option value="meat">Meat</option>
-                  <option value="seafood">Seafood</option>
-                  <option value="beverages">Beverages</option>
-                  <option value="sweets">Sweets</option>
+                  <option value="Fruits">Fruits</option>
+                  <option value="Drinks">Drinks</option>
+                  <option value="Vegetables">Vegetables</option>
+                  <option value="Snacks">Snacks</option>
+                  <option value="Dairy">Dairy</option>
+                  <option value="Meat">Meat</option>
+                  <option value="Seafood">Seafood</option>
+                  <option value="Beverages">Beverages</option>
+                  <option value="Sweets">Sweets</option>
                 </select>
               </div>
 
