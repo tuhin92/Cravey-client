@@ -1,11 +1,12 @@
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink, useLocation } from "react-router-dom";
 import { Home, ShoppingCart, PlusSquare, Edit, Trash2, Users, Settings, LogOut, Menu, X, Image, ClipboardList } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const DashboardLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+  const location = useLocation();
+
   // Close mobile menu when screen size increases
   useEffect(() => {
     const handleResize = () => {
@@ -16,6 +17,19 @@ const DashboardLayout = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Function to get formatted breadcrumb
+  const getBreadcrumb = () => {
+    const paths = location.pathname.split('/').filter(Boolean);
+    if (paths.length <= 1) return '';
+    
+    return paths.slice(1)
+      .map(path => path.split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+      )
+      .join(' → ');
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -72,15 +86,22 @@ const DashboardLayout = () => {
         {/* Header */}
         <header className="bg-white shadow-sm z-10">
           <div className="py-4 px-6 flex items-center justify-between">
-            <div className="flex items-center">
-              {/* Hamburger for mobile */}
-              <button
-                className="mr-4 p-1 rounded-md hover:bg-gray-100 md:hidden"
-                onClick={() => setMobileMenuOpen(true)}
-              >
-                <Menu size={24} />
-              </button>
-              <h2 className="text-2xl font-semibold text-gray-800">Dashboard</h2>
+            <div className="flex flex-col">
+              <div className="flex items-center">
+                {/* Hamburger for mobile */}
+                <button
+                  className="mr-4 p-1 rounded-md hover:bg-gray-100 md:hidden"
+                  onClick={() => setMobileMenuOpen(true)}
+                >
+                  <Menu size={24} />
+                </button>
+                <h2 className="text-2xl font-semibold text-gray-800">Dashboard</h2>
+              </div>
+              {getBreadcrumb() && (
+                <p className="text-sm text-gray-500 mt-1">
+                  {getBreadcrumb()}
+                </p>
+              )}
             </div>
             
             {/* Logout button */}
