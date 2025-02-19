@@ -36,6 +36,12 @@ const AuthProvider = ({ children }) => {
         return signInWithPopup(auth, googleProvider);
     };
 
+    // Log out
+    const logOut = () => {
+        setLoading(true);
+        return signOut(auth);
+    };
+
     // Monitor auth state changes
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -51,7 +57,8 @@ const AuthProvider = ({ children }) => {
         loading,
         createUser,
         updateUserProfile,
-        googleSignIn
+        googleSignIn,
+        logOut
     };
 
     return (

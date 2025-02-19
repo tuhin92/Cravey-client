@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../../../Provider/AuthProvider";
+import { LogOut, User } from "lucide-react";
 
 const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   // Orange color styling for active links
   const getLinkClass = ({ isActive }) => {
     return isActive
@@ -75,6 +87,49 @@ const Navbar = () => {
     }
   );
 
+  const renderAuthButton = () => {
+    if (user) {
+      return (
+        <div className="dropdown dropdown-end">
+          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+            <div className="w-10 rounded-full">
+              {user.photoURL ? (
+                <img 
+                  src={user.photoURL} 
+                  alt={user.displayName} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="bg-[#0381A1] w-full h-full flex items-center justify-center">
+                  <User className="w-6 h-6 text-white" />
+                </div>
+              )}
+            </div>
+          </div>
+          <div tabIndex={0} className="dropdown-content z-[1] menu p-4 shadow bg-white rounded-box w-52 mt-2">
+            <div className="px-4 py-3 border-b">
+              <p className="text-sm font-medium text-gray-900">{user.displayName}</p>
+              <p className="text-xs text-gray-500 truncate">{user.email}</p>
+            </div>
+            <button
+              onClick={handleLogOut}
+              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg w-full mt-2"
+            >
+              <LogOut size={16} />
+              Sign out
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <NavLink to="sign-in" className="btn btn-outline text-white">
+        Sign in
+      </NavLink>
+    );
+  };
+
   return (
     <div
       className="bg-[#0393b7] text-white sticky top-0 z-50"
@@ -116,9 +171,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <NavLink to="sign-in" className="btn btn-outline text-white">
-            Sign in
-          </NavLink>
+          {renderAuthButton()}
         </div>
       </div>
     </div>
