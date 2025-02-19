@@ -4,8 +4,8 @@ import { NavLink } from "react-router-dom";
 const Navbar = () => {
   // Orange color styling for active links
   const getLinkClass = ({ isActive }) => {
-    return isActive 
-      ? "text-orange-400 font-bold hover:text-orange-300 border-b-2 border-orange-400" 
+    return isActive
+      ? "text-orange-400 font-bold hover:text-orange-300 border-b-2 border-orange-400"
       : "text-white hover:text-gray-200";
   };
 
@@ -36,7 +36,7 @@ const Navbar = () => {
 
   // Add custom CSS to enforce our styles with orange color
   React.useEffect(() => {
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.innerHTML = `
       .active-nav-link {
         color: #fb923c !important;
@@ -45,7 +45,7 @@ const Navbar = () => {
       }
     `;
     document.head.appendChild(style);
-    
+
     return () => {
       document.head.removeChild(style);
     };
@@ -54,23 +54,26 @@ const Navbar = () => {
   // Custom click handler to add our class
   const handleNavLinkClick = (e) => {
     // Remove active class from all links
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.classList.remove('active-nav-link');
+    document.querySelectorAll(".nav-link").forEach((link) => {
+      link.classList.remove("active-nav-link");
     });
-    
+
     // Add active class to clicked link
-    e.currentTarget.classList.add('active-nav-link');
+    e.currentTarget.classList.add("active-nav-link");
   };
 
   // Modify navLinks to include click handler and custom class
-  const enhancedNavLinks = React.Children.map(navLinks.props.children, (child) => {
-    return React.cloneElement(child, {
-      children: React.cloneElement(child.props.children, {
-        className: (props) => `nav-link ${getLinkClass(props)}`,
-        onClick: handleNavLinkClick
-      })
-    });
-  });
+  const enhancedNavLinks = React.Children.map(
+    navLinks.props.children,
+    (child) => {
+      return React.cloneElement(child, {
+        children: React.cloneElement(child.props.children, {
+          className: (props) => `nav-link ${getLinkClass(props)}`,
+          onClick: handleNavLinkClick,
+        }),
+      });
+    }
+  );
 
   return (
     <div
@@ -108,10 +111,14 @@ const Navbar = () => {
           <a className="btn btn-ghost text-2xl text-white">Cravey</a>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1 bg-transparent">{enhancedNavLinks}</ul>
+          <ul className="menu menu-horizontal px-1 bg-transparent">
+            {enhancedNavLinks}
+          </ul>
         </div>
         <div className="navbar-end">
-          <a className="btn btn-outline text-white">Sign in</a>
+          <NavLink to="sign-in" className="btn btn-outline text-white">
+            Sign in
+          </NavLink>
         </div>
       </div>
     </div>

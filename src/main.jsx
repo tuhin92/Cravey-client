@@ -23,31 +23,31 @@ import SignIn from "./components/sign-in/SignIn";
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));
 root.render(
-  <StrictMode>
-    <BrowserRouter>
-    <ScrollToTop />
-      <Routes>
-        {/* Main website layout (with navbar & footer) */}
-        <Route path="/" element={<Main />}>
-          <Route index element={<Home />} />
-          <Route path="shop" element={<Shop />} />
-          <Route path="services" element={<Services />} />
-          <Route path="about" element={<About />} />
-          <Route path="cart" element={<Cart />} />
-          <Route path="product-info/:id" element={<Product_info />} />
-          <Route path="sign-up" element={<SignUp/>} />
-          <Route path="sign-in" element={<SignIn />} />
-        </Route>
+    <StrictMode>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          {/* Main website layout (with navbar & footer) */}
+          <Route path="/" element={<Main />}>
+            <Route index element={<Home />} />
+            <Route path="shop" element={<Shop />} />
+            <Route path="services" element={<Services />} />
+            <Route path="about" element={<About />} />
+            <Route path="cart" element={<Cart />} />
+            <Route path="product-info/:id" element={<Product_info />} />
+            <Route path="sign-up" element={<SignUp />} />
+            <Route path="sign-in" element={<SignIn />} />
+          </Route>
 
-        {/* Dashboard Layout (without navbar & footer) */}
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="add-product" element={<AddProduct />} />
-          <Route path="products" element={<Products />} />
-          <Route path="manage-orders" element={<ManageOrders />} />
-          <Route path="update-product/:id" element={<Update />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  </StrictMode>
+          {/* Dashboard Layout (without navbar & footer) */}
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="add-product" element={<AddProduct />} />
+            <Route path="products" element={<Products />} />
+            <Route path="manage-orders" element={<ManageOrders />} />
+            <Route path="update-product/:id" element={<Update />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </StrictMode>
 );
