@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { AuthContext } from '../../Provider/AuthProvider';
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -20,8 +22,11 @@ const SignUp = () => {
     const [showErrors, setShowErrors] = useState(false);
     const [passwordsMatch, setPasswordsMatch] = useState(true);
 
-    // Update the validatePassword function
-    const validatePassword = (password) => {
+    const { createUser, updateUserProfile, googleSignIn } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    // Optimize password validation with useCallback
+    const validatePassword = useCallback((password) => {
         const checks = {
             hasLower: /[a-z]/.test(password),
             hasUpper: /[A-Z]/.test(password),
@@ -29,27 +34,24 @@ const SignUp = () => {
             hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(password),
             hasMinLength: password.length >= 8
         };
-        setPasswordChecks(checks);
-        return Object.values(checks).every(Boolean);
-    };
+        return checks;
+    }, []);
 
-    // Update handleChange function
+    // Update handleChange to avoid unnecessary rerenders
     const handleChange = (e) => {
         const { name, value } = e.target;
         
         setFormData(prev => {
             const newFormData = { ...prev, [name]: value };
             
-            // Only validate password if it's being changed
             if (name === 'password') {
-                validatePassword(value);
-                // Check if passwords match
+                const checks = validatePassword(value);
+                setPasswordChecks(checks);
                 if (newFormData.confirmPassword) {
                     setPasswordsMatch(value === newFormData.confirmPassword);
                 }
             }
             
-            // Check if passwords match when typing confirm password
             if (name === 'confirmPassword') {
                 setPasswordsMatch(value === newFormData.password);
             }
@@ -58,25 +60,29 @@ const SignUp = () => {
         });
     };
 
-    // Update handleSubmit function
-    const handleSubmit = (e) => {
+    // Update handleSubmit to use validatePassword correctly
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setShowErrors(true);
 
-        // Validate all requirements
-        const isPasswordValid = validatePassword(formData.password);
+        const passwordValidationChecks = validatePassword(formData.password);
+        const isPasswordValid = Object.values(passwordValidationChecks).every(Boolean);
         const doPasswordsMatch = formData.password === formData.confirmPassword;
+
+        setPasswordChecks(passwordValidationChecks);
 
         if (!isPasswordValid || !doPasswordsMatch) {
             setPasswordsMatch(doPasswordsMatch);
             return;
         }
 
-        // If validation passes, proceed with form submission
         try {
-            console.log('Form submitted successfully:', formData);
+            const result = await createUser(formData.email, formData.password);
+            await updateUserProfile(formData.name);
             
-            // Reset form and states
+            toast.success('Sign up successful!');
+            
+            // Reset form
             setFormData({
                 name: '',
                 email: '',
@@ -92,12 +98,25 @@ const SignUp = () => {
                 hasMinLength: false
             });
             setPasswordsMatch(true);
+            
+            navigate('/');
         } catch (error) {
-            console.error('Error submitting form:', error);
+            toast.error(error.message);
         }
     };
 
-    // Update the renderPasswordValidation function
+    // Add this function after the handleSubmit function and before the renderPasswordValidation function
+    const handleGoogleSignIn = async () => {
+        try {
+            const result = await googleSignIn();
+            toast.success('Sign up with Google successful!');
+            navigate('/');
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
+
+    // Update password validation rendering logic
     const renderPasswordValidation = () => {
         if (!showErrors && !formData.password) return null;
 
@@ -189,7 +208,7 @@ const SignUp = () => {
                                 value={formData.password}
                                 onChange={handleChange}
                                 className={`w-full pl-10 pr-10 py-2 border ${
-                                    showErrors && !validatePassword(formData.password) 
+                                    (showErrors || formData.password) && !validatePassword(formData.password) 
                                         ? 'border-red-500' 
                                         : 'border-gray-300'
                                 } rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0393B7] focus:border-transparent`}
@@ -204,7 +223,7 @@ const SignUp = () => {
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
                         </div>
-                        {renderPasswordValidation()}
+                        {(showErrors || formData.password) && renderPasswordValidation()}
                     </div>
 
                     <div className='space-y-2'>
@@ -255,6 +274,7 @@ const SignUp = () => {
 
                 <button
                     type="button"
+                    onClick={handleGoogleSignIn}
                     className="w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-600 font-medium border border-gray-300 rounded-lg px-4 py-2 transition duration-200"
                 >
                     <img 

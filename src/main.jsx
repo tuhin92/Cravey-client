@@ -19,10 +19,12 @@ import Update from "./pages/Dashboard/UpdateProduct/Update";
 import Main from "./components/layout/Main";
 import SignUp from "./components/sing-up/SignUp";
 import SignIn from "./components/sign-in/SignIn";
+import AuthProvider from "./Provider/AuthProvider";
 
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));
 root.render(
+  <AuthProvider>
     <StrictMode>
       <BrowserRouter>
         <ScrollToTop />
@@ -50,4 +52,5 @@ root.render(
         </Routes>
       </BrowserRouter>
     </StrictMode>
+  </AuthProvider>
 );
