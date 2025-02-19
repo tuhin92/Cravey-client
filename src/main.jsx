@@ -2,7 +2,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
-import Main from "./layout/Main";
 import AddProduct from "./pages/Dashboard/AddProduct/AddProduct";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import DashboardLayout from "./pages/Dashboard/Layout/DashboardLayout";
@@ -17,6 +16,7 @@ import Services from "./pages/UserEnd/Services";
 import Cart from "./pages/UserEnd/Cart";
 import Product_info from "./pages/UserEnd/Product_info";
 import Update from "./pages/Dashboard/UpdateProduct/Update";
+import Main from "./components/layout/Main";
 
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));
