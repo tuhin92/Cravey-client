@@ -111,7 +111,7 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1 bg-transparent">{enhancedNavLinks}</ul>
         </div>
         <div className="navbar-end">
-          <a className="btn btn-outline text-white">Button</a>
+          <a className="btn btn-outline text-white">Sign in</a>
         </div>
       </div>
     </div>

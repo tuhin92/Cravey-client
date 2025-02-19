@@ -17,6 +17,8 @@ import Cart from "./pages/UserEnd/Cart";
 import Product_info from "./pages/UserEnd/Product_info";
 import Update from "./pages/Dashboard/UpdateProduct/Update";
 import Main from "./components/layout/Main";
+import SignUp from "./components/sing-up/SignUp";
+import SignIn from "./components/sign-in/SignIn";
 
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));
@@ -33,6 +35,8 @@ root.render(
           <Route path="about" element={<About />} />
           <Route path="cart" element={<Cart />} />
           <Route path="product-info/:id" element={<Product_info />} />
+          <Route path="sign-up" element={<SignUp/>} />
+          <Route path="sign-in" element={<SignIn />} />
         </Route>
 
         {/* Dashboard Layout (without navbar & footer) */}
