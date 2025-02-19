@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { AuthContext } from '../../Provider/AuthProvider';
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -80,7 +81,15 @@ const SignUp = () => {
             const result = await createUser(formData.email, formData.password);
             await updateUserProfile(formData.name);
             
-            toast.success('Sign up successful!');
+            Swal.fire({
+                icon: 'success',
+                title: 'Welcome!',
+                text: 'Sign up successful!',
+                showConfirmButton: false,
+                timer: 1500,
+                position: 'top-end',
+                toast: true
+            });
             
             // Reset form
             setFormData({
@@ -101,18 +110,42 @@ const SignUp = () => {
             
             navigate('/');
         } catch (error) {
-            toast.error(error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.message,
+                position: 'top-end',
+                toast: true,
+                timer: 3000
+            });
         }
     };
 
-    // Add this function after the handleSubmit function and before the renderPasswordValidation function
+    // Update the handleGoogleSignIn function
     const handleGoogleSignIn = async () => {
         try {
             const result = await googleSignIn();
-            toast.success('Sign up with Google successful!');
-            navigate('/');
+            if (result.user) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Welcome!',
+                    text: 'Sign in with Google successful!',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    position: 'top-end',
+                    toast: true
+                });
+                navigate('/');
+            }
         } catch (error) {
-            toast.error(error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.message,
+                position: 'top-end',
+                toast: true,
+                timer: 3000
+            });
         }
     };
 

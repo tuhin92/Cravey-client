@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { AuthContext } from '../../Provider/AuthProvider';
+import Swal from 'sweetalert2';
 
 const SignIn = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -9,9 +11,43 @@ const SignIn = () => {
         password: ''
     });
 
-    const handleSubmit = (e) => {
+    const { signIn } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
+        
+        try {
+            const result = await signIn(formData.email, formData.password);
+            if (result.user) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Welcome back!',
+                    text: 'Sign in successful!',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    position: 'top-end',
+                    toast: true
+                });
+                
+                // Reset form
+                setFormData({
+                    email: '',
+                    password: ''
+                });
+                
+                navigate('/');
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.message,
+                position: 'top-end',
+                toast: true,
+                timer: 3000
+            });
+        }
     };
 
     const handleChange = (e) => {

@@ -2,15 +2,44 @@ import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import { LogOut, User } from "lucide-react";
+import Swal from 'sweetalert2';
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
 
   const handleLogOut = async () => {
     try {
-      await logOut();
+      await Swal.fire({
+        title: 'Are you sure?',
+        text: "You will be signed out!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#0393B7',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, sign out!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          logOut();
+          Swal.fire({
+            icon: 'success',
+            title: 'Signed Out!',
+            text: 'You have been successfully signed out.',
+            showConfirmButton: false,
+            timer: 1500,
+            position: 'top-end',
+            toast: true
+          });
+        }
+      });
     } catch (error) {
-      console.error('Logout error:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.message,
+        position: 'top-end',
+        toast: true,
+        timer: 3000
+      });
     }
   };
 
