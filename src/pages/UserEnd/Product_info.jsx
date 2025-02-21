@@ -2,14 +2,16 @@
 
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
-import { ArrowLeft, ShoppingCart, Heart, CheckCircle, XCircle } from "lucide-react"
+import { ArrowLeft, ShoppingCart, Heart, CheckCircle, XCircle, Trash } from "lucide-react"
 import HelmetWrapper from "../../components/HelmetWrapper"
+import Swal from "sweetalert2"
 
 const Product_info = () => {
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const { id } = useParams()
+  const [isInCart, setIsInCart] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -35,6 +37,71 @@ const Product_info = () => {
         setLoading(false)
       })
   }, [id])
+
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || []
+    setIsInCart(cart.some((item) => item._id === id))
+  }, [id])
+
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || []
+
+    if (cart.some((item) => item._id === product._id)) {
+      Swal.fire({
+        icon: "info",
+        title: "Already in Cart",
+        text: "This item is already in your cart",
+        showConfirmButton: false,
+        timer: 1500,
+        position: "top-end",
+        toast: true,
+      })
+      return
+    }
+
+    const updatedCart = [...cart, product]
+    localStorage.setItem("cart", JSON.stringify(updatedCart))
+    setIsInCart(true)
+
+    Swal.fire({
+      icon: "success",
+      title: "Added to Cart!",
+      text: `${product.productName} has been added to your cart`,
+      showConfirmButton: false,
+      timer: 1500,
+      position: "top-end",
+      toast: true,
+    })
+  }
+
+  const handleRemoveFromCart = () => {
+    Swal.fire({
+      title: "Remove from Cart?",
+      text: `Do you want to remove "${product.productName}" from your cart?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, Remove it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const cart = JSON.parse(localStorage.getItem("cart")) || []
+        const updatedCart = cart.filter((item) => item._id !== product._id)
+        localStorage.setItem("cart", JSON.stringify(updatedCart))
+        setIsInCart(false)
+
+        Swal.fire({
+          icon: "success",
+          title: "Removed!",
+          text: `${product.productName} has been removed from your cart`,
+          showConfirmButton: false,
+          timer: 1500,
+          position: "top-end",
+          toast: true,
+        })
+      }
+    })
+  }
 
   if (loading) {
     return (
@@ -121,14 +188,25 @@ const Product_info = () => {
 
               <div className="flex flex-wrap gap-2">
                 <button
-                  className={`flex items-center px-4 py-2 rounded ${
-                    isInStock
-                      ? "bg-blue-500 hover:bg-blue-600 text-white"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  } transition duration-300 ease-in-out flex-1`}
+                  className={`flex items-center px-4 py-2 rounded transition duration-300 ease-in-out flex-1 ${
+                    !isInStock
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : isInCart
+                      ? "bg-red-500 hover:bg-red-600 text-white"
+                      : "bg-blue-500 hover:bg-blue-600 text-white"
+                  }`}
                   disabled={!isInStock}
+                  onClick={isInCart ? handleRemoveFromCart : handleAddToCart}
                 >
-                  <ShoppingCart className="mr-2" size={16} /> Add to Cart
+                  {isInCart ? (
+                    <>
+                      <Trash className="mr-2" size={16} /> Remove from Cart
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="mr-2" size={16} /> Add to Cart
+                    </>
+                  )}
                 </button>
                 <button className="flex items-center border border-purple-500 text-purple-500 hover:bg-purple-50 px-4 py-2 rounded transition duration-300 ease-in-out flex-1">
                   <Heart className="mr-2" size={16} /> Wishlist
@@ -142,5 +220,5 @@ const Product_info = () => {
   )
 }
 
-export default Product_info;
+export default Product_info
 
