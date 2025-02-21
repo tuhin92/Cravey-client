@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { AuthContext } from "../../../Provider/AuthProvider";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, ShoppingCart } from "lucide-react";
 import Swal from 'sweetalert2';
 
 const Navbar = () => {
@@ -199,7 +199,12 @@ const Navbar = () => {
             {enhancedNavLinks}
           </ul>
         </div>
-        <div className="navbar-end">
+        <div className="navbar-end flex items-center gap-4">
+          {/* Add Cart Icon */}
+          <Link to="/cart" className="btn btn-ghost btn-circle">
+            <ShoppingCart className="h-6 w-6 text-white" />
+          </Link>
+          
           {renderAuthButton()}
         </div>
       </div>
