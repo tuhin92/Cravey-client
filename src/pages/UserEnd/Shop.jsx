@@ -55,6 +55,34 @@ const ProductCard = ({ product, onAddToCart }) => {
   );
 };
 
+const ProductCardSkeleton = () => {
+  return (
+    <div className="rounded-xl bg-white border border-gray-200 animate-pulse">
+      {/* Image Skeleton */}
+      <div className="p-4">
+        <div className="h-48 w-full rounded-lg bg-gray-200" />
+      </div>
+
+      {/* Content Skeleton */}
+      <div className="p-4 pt-0">
+        <div className="mb-2 flex items-center justify-between">
+          <div className="h-6 w-20 bg-gray-200 rounded-full" />
+          <div className="h-6 w-16 bg-gray-200 rounded-lg" />
+        </div>
+
+        <div className="h-6 w-3/4 bg-gray-200 rounded-lg mb-1" />
+        <div className="h-4 w-1/2 bg-gray-200 rounded-lg mb-4" />
+
+        {/* Button Skeletons */}
+        <div className="grid grid-cols-2 gap-2">
+          <div className="h-10 bg-gray-200 rounded-lg" />
+          <div className="h-10 bg-gray-200 rounded-lg" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -181,8 +209,10 @@ const Shop = () => {
 
       {/* Loading State */}
       {loading ? (
-        <div className="flex justify-center items-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#0393B7]"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {[...Array(8)].map((_, index) => (
+            <ProductCardSkeleton key={index} />
+          ))}
         </div>
       ) : filteredProducts.length === 0 ? (
         <div className="flex flex-col items-center justify-center min-h-[400px] text-gray-500">
