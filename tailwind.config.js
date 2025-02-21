@@ -24,6 +24,7 @@ export default {
   plugins: [
     daisyui,
     addVariablesForColors,
+    require('@tailwindcss/typography'),
   ],
   daisyui: {
     themes: ["light"],
