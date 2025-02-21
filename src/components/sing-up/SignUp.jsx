@@ -78,37 +78,43 @@ const SignUp = () => {
         }
 
         try {
-            const result = await createUser(formData.email, formData.password);
-            await updateUserProfile(formData.name);
-            
-            Swal.fire({
-                icon: 'success',
-                title: 'Welcome!',
-                text: 'Sign up successful!',
-                showConfirmButton: false,
-                timer: 1500,
-                position: 'top-end',
-                toast: true
-            });
-            
-            // Reset form
-            setFormData({
-                name: '',
-                email: '',
-                password: '',
-                confirmPassword: ''
-            });
-            setShowErrors(false);
-            setPasswordChecks({
-                hasLower: false,
-                hasUpper: false,
-                hasNumber: false,
-                hasSpecial: false,
-                hasMinLength: false
-            });
-            setPasswordsMatch(true);
-            
-            navigate('/');
+            // Create user in Firebase
+            const result = await createUser(
+                formData.email, 
+                formData.password, 
+                formData.name
+            );
+
+            if (result.user) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Welcome!',
+                    text: 'Sign up successful!',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    position: 'top-end',
+                    toast: true
+                });
+                
+                // Reset form
+                setFormData({
+                    name: '',
+                    email: '',
+                    password: '',
+                    confirmPassword: ''
+                });
+                setShowErrors(false);
+                setPasswordChecks({
+                    hasLower: false,
+                    hasUpper: false,
+                    hasNumber: false,
+                    hasSpecial: false,
+                    hasMinLength: false
+                });
+                setPasswordsMatch(true);
+                
+                navigate('/');
+            }
         } catch (error) {
             Swal.fire({
                 icon: 'error',

@@ -17,6 +17,30 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // Add this function in AuthProvider
+    const saveUser = async (user) => {
+        try {
+            const response = await fetch('http://localhost:5000/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    role: 'user',
+                    createdAt: new Date(),
+                }),
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error saving user:', error);
+            throw error;
+        }
+    };
+
     // Create user with email and password
     const createUser = async (email, password, name, photoURL) => {
         setLoading(true);
@@ -30,6 +54,9 @@ const AuthProvider = ({ children }) => {
                 // Update the user state to include the new profile data
                 const updatedUser = auth.currentUser;
                 setUser(updatedUser);
+                
+                // Save user to database
+                await saveUser(updatedUser);
             }
             return result;
         } finally {
@@ -51,8 +78,9 @@ const AuthProvider = ({ children }) => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
             if (result.user) {
-                // Google sign-in already provides photo and name
                 setUser(result.user);
+                // Save Google user to database
+                await saveUser(result.user);
             }
             return result;
         } finally {
