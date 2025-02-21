@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Search, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import Swal from "sweetalert2";
 import HelmetWrapper from "../../components/HelmetWrapper";
+import { motion } from "framer-motion";
 
 const ProductCard = ({ product, onAddToCart }) => {
   const { productName, brandName, category, price, imageUrl, _id } = product;
@@ -80,6 +81,48 @@ const ProductCardSkeleton = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const NoDataAnimation = () => {
+  return (
+    <motion.div 
+      className="flex flex-col items-center justify-center min-h-[400px]"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div
+        className="w-24 h-24 mb-6 text-gray-400"
+        animate={{ 
+          scale: [1, 1.1, 1],
+          rotate: [0, 5, -5, 0]
+        }}
+        transition={{ 
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      >
+        <Search size={96} />
+      </motion.div>
+      <motion.p 
+        className="text-xl font-semibold text-gray-600 mb-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        No products found
+      </motion.p>
+      <motion.p 
+        className="text-gray-500 text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
+        Try adjusting your search or filter criteria
+      </motion.p>
+    </motion.div>
   );
 };
 
@@ -215,10 +258,7 @@ const Shop = () => {
           ))}
         </div>
       ) : filteredProducts.length === 0 ? (
-        <div className="flex flex-col items-center justify-center min-h-[400px] text-gray-500">
-          <p className="text-lg">No products available.</p>
-          <p className="text-sm mt-2">Try adjusting your search or filter criteria.</p>
-        </div>
+        <NoDataAnimation />
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
