@@ -17,9 +17,29 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Add this function in AuthProvider
+    // Add this function to check if user exists
+    const checkUserExists = async (email) => {
+        try {
+            const response = await fetch(`http://localhost:5000/users/${email}`);
+            const data = await response.json();
+            return data.exists;
+        } catch (error) {
+            console.error('Error checking user:', error);
+            return false;
+        }
+    };
+
+    // Update the saveUser function
     const saveUser = async (user) => {
         try {
+            // First check if user exists
+            const userExists = await checkUserExists(user.email);
+            
+            if (userExists) {
+                console.log('User already exists in database');
+                return null;
+            }
+
             const response = await fetch('http://localhost:5000/users', {
                 method: 'POST',
                 headers: {
