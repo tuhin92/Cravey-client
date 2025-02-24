@@ -20,6 +20,7 @@ import Main from "./components/layout/Main";
 import SignUp from "./components/sing-up/SignUp";
 import SignIn from "./components/sign-in/SignIn";
 import AuthProvider from "./Provider/AuthProvider";
+import AdminRoute from "./components/Routes/AdminRoute";
 
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));
@@ -42,7 +43,11 @@ root.render(
           </Route>
 
           {/* Dashboard Layout (without navbar & footer) */}
-          <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route path="/dashboard" element={
+            <AdminRoute>
+              <DashboardLayout />
+            </AdminRoute>
+          }>
             <Route index element={<Dashboard />} />
             <Route path="add-product" element={<AddProduct />} />
             <Route path="products" element={<Products />} />

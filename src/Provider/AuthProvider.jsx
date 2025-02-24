@@ -16,6 +16,7 @@ const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     // Add this function to check if user exists
     const checkUserExists = async (email) => {
@@ -25,6 +26,18 @@ const AuthProvider = ({ children }) => {
             return data.exists;
         } catch (error) {
             console.error('Error checking user:', error);
+            return false;
+        }
+    };
+
+    // Add this function to check if user is admin
+    const checkAdminStatus = async (email) => {
+        try {
+            const response = await fetch(`http://localhost:5000/users/admin/${email}`);
+            const data = await response.json();
+            return data.isAdmin;
+        } catch (error) {
+            console.error('Error checking admin status:', error);
             return false;
         }
     };
@@ -123,8 +136,14 @@ const AuthProvider = ({ children }) => {
 
     // Monitor auth state changes
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
+            if (currentUser?.email) {
+                const adminStatus = await checkAdminStatus(currentUser.email);
+                setIsAdmin(adminStatus);
+            } else {
+                setIsAdmin(false);
+            }
             setLoading(false);
         });
 
@@ -140,6 +159,7 @@ const AuthProvider = ({ children }) => {
         googleSignIn,
         logOut,
         updateUserProfile,
+        isAdmin,
         // Add these helper functions
         getProfileImage: (user) => user?.photoURL || `https://ui-avatars.com/api/?name=${user?.displayName || 'User'}&background=0381A1&color=fff`,
         getDisplayName: (user) => user?.displayName || 'User'
