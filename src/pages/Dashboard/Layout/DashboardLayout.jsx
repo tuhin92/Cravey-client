@@ -1,11 +1,14 @@
 import { Outlet, NavLink, useLocation } from "react-router-dom";
-import { Home, ShoppingCart, PlusSquare, Edit, Trash2, Users, Settings, LogOut, Menu, X, Image, ClipboardList } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Home, ShoppingCart, PlusSquare, Edit, Trash2, Users, Settings, LogOut, Menu, X, Image, ClipboardList, User } from "lucide-react";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../../../Provider/AuthProvider";
+import Swal from "sweetalert2";
 
 const DashboardLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, logOut } = useContext(AuthContext);
 
   // Close mobile menu when screen size increases
   useEffect(() => {
@@ -29,6 +32,43 @@ const DashboardLayout = () => {
         .join(' ')
       )
       .join(' → ');
+  };
+
+  // Add logout handler
+  const handleLogOut = async () => {
+    try {
+      await Swal.fire({
+        title: 'Are you sure?',
+        text: "You will be signed out!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#0393B7',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, sign out!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          logOut();
+          Swal.fire({
+            icon: 'success',
+            title: 'Signed Out!',
+            text: 'You have been successfully signed out.',
+            showConfirmButton: false,
+            timer: 1500,
+            position: 'top-end',
+            toast: true
+          });
+        }
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.message,
+        position: 'top-end',
+        toast: true,
+        timer: 3000
+      });
+    }
   };
 
   return (
@@ -104,14 +144,43 @@ const DashboardLayout = () => {
               )}
             </div>
             
-            {/* Logout button */}
-            <NavLink 
-              to="/logout" 
-              className="flex items-center text-gray-700 hover:bg-gray-100 rounded-md p-2 transition-colors"
-            >
-              <span className="mr-2 hidden sm:inline">Logout</span>
-              <LogOut size={20} />
-            </NavLink>
+            {/* User Profile Dropdown */}
+            <div className="relative group">
+              <div className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-gray-100">
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                  {user?.photoURL ? (
+                    <img 
+                      src={user.photoURL} 
+                      alt={user.displayName} 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="bg-[#0381A1] w-full h-full flex items-center justify-center">
+                      <User className="w-6 h-6 text-white" />
+                    </div>
+                  )}
+                </div>
+                <div className="hidden md:block">
+                  <p className="text-sm font-medium text-gray-700">{user?.displayName}</p>
+                  <p className="text-xs text-gray-500">{user?.email}</p>
+                </div>
+              </div>
+
+              {/* Dropdown Menu */}
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200">
+                <div className="px-4 py-2 border-b md:hidden">
+                  <p className="text-sm font-medium text-gray-700">{user?.displayName}</p>
+                  <p className="text-xs text-gray-500">{user?.email}</p>
+                </div>
+                <button
+                  onClick={handleLogOut}
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2"
+                >
+                  <LogOut size={16} />
+                  Sign out
+                </button>
+              </div>
+            </div>
           </div>
         </header>
         
