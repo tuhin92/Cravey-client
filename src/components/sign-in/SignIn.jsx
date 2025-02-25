@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff, Info } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Info, ChevronDown, ChevronUp } from "lucide-react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import HelmetWrapper from "../HelmetWrapper";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,6 +11,7 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+  const [showCredentials, setShowCredentials] = useState(false);
 
   const { signIn } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -60,44 +62,55 @@ const SignIn = () => {
   return (
     <div className="min-h-screen max-w-7xl mx-auto flex flex-col items-center justify-center px-4 py-8">
       {/* Enhanced Info Banner */}
-      <div className="w-full max-w-md mb-6">
-        <div className="bg-gradient-to-r from-[#0393B7]/10 to-blue-50 backdrop-blur-sm border border-[#0393B7]/20 rounded-lg p-6 space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-[#0393B7]/20 rounded-full">
-              <Info className="text-[#0393B7]" size={20} />
+      <HelmetWrapper title="Cravey | Sign in" />
+      <div className="w-full max-w-md mb-4">
+        <button
+          onClick={() => setShowCredentials(!showCredentials)}
+          className="w-full flex items-center justify-center gap-2 p-2 mb-2 bg-[#0393B7] text-white rounded-lg hover:bg-[#027a9a] transition-colors duration-300"
+        >
+          <span>Show Admin Credentials</span>
+          {showCredentials ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+        </button>
+
+        {showCredentials && (
+          <div className="bg-gradient-to-r from-[#0393B7]/10 to-blue-50 backdrop-blur-sm border border-[#0393B7]/20 rounded-lg p-4 space-y-3 animate-fadeIn">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-[#0393B7]/20 rounded-full">
+                <Info className="text-[#0393B7]" size={20} />
+              </div>
+              <h4 className="text-base font-semibold text-gray-800">Admin Access</h4>
             </div>
-            <h4 className="text-base font-semibold text-gray-800">Admin Access</h4>
-          </div>
-          
-          <div className="pl-11">
-            <p className="text-gray-600 text-sm leading-relaxed">
-              Use these credentials to access the admin dashboard:
-            </p>
             
-            <div className="mt-3 space-y-2">
-              <div className="flex items-center gap-2 bg-white/60 p-2 rounded border border-[#0393B7]/10">
-                <Mail size={16} className="text-[#0393B7]" />
-                <code className="text-sm font-medium text-gray-700">
-                  cravey.admin@gmail.com
-                </code>
-              </div>
+            <div className="pl-11">
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Use these credentials to access the admin dashboard:
+              </p>
               
-              <div className="flex items-center gap-2 bg-white/60 p-2 rounded border border-[#0393B7]/10">
-                <Lock size={16} className="text-[#0393B7]" />
-                <code className="text-sm font-medium text-gray-700">
-                  Cravey7xz12@
-                </code>
+              <div className="mt-3 space-y-2">
+                <div className="flex items-center gap-2 bg-white/60 p-2 rounded border border-[#0393B7]/10">
+                  <Mail size={16} className="text-[#0393B7]" />
+                  <code className="text-sm font-medium text-gray-700">
+                    cravey.admin@gmail.com
+                  </code>
+                </div>
+                
+                <div className="flex items-center gap-2 bg-white/60 p-2 rounded border border-[#0393B7]/10">
+                  <Lock size={16} className="text-[#0393B7]" />
+                  <code className="text-sm font-medium text-gray-700">
+                    Cravey7xz12@
+                  </code>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Rest of the sign-in form */}
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
+      <div className="w-full max-w-md p-6 space-y-4 bg-white rounded-xl shadow-lg">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Sign In</h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <h2 className="text-2xl font-bold text-gray-900">Sign In</h2>
+          <p className="mt-1 text-sm text-gray-600">
             Don't have an account?{" "}
             <Link
               to="/sign-up"
@@ -108,8 +121,8 @@ const SignIn = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div className="space-y-1">
             <label
               htmlFor="email"
               className="text-sm font-medium text-gray-700"
