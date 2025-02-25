@@ -1,29 +1,35 @@
+import React from 'react';
+
+// Components
 import HelmetWrapper from "../../components/HelmetWrapper";
-import { useNavigate } from 'react-router-dom';
 import Hero from "../../components/About/Hero";
-import Features from "../../components/About/Features";
 import Mission from "../../components/About/Mission";
+import Features from "../../components/About/Features";
 import StatsSection from "../../components/About/StatsSection";
 import StorySection from "../../components/About/StorySection";
 import CTASection from "../../components/About/CTASection";
 
+/**
+ * About Page Component
+ * Displays company information, mission, features, stats, story and call-to-action
+ */
 const About = () => {
   return (
-    <>
+    <main className="min-h-screen bg-gray-50">
+      {/* SEO */}
       <HelmetWrapper title="Cravey | About Us" />
-      {/* Hero Section with Parallax Effect */}
+
+      {/* Main Content Sections */}
       <Hero />
-      {/* Mission Statement */}
-      <Mission />
-      {/* Features Grid with Animation */}
-      <Features />
-      {/* Stats Section with Icons */}
-      <StatsSection />
-      {/* Story Section with Image */}
-      <StorySection />
-      {/* Enhanced CTA Section */}
-      <CTASection />
-    </>
+      
+      <div className="space-y-16">
+        <Mission />
+        <Features />
+        <StatsSection />
+        <StorySection />
+        <CTASection />
+      </div>
+    </main>
   );
 };
 
