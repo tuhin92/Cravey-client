@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import { LogOut, User, ShoppingCart } from "lucide-react";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   // Add loading state from AuthContext
@@ -11,35 +11,35 @@ const Navbar = () => {
   const handleLogOut = async () => {
     try {
       await Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You will be signed out!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#0393B7',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, sign out!'
+        confirmButtonColor: "#0393B7",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, sign out!",
       }).then((result) => {
         if (result.isConfirmed) {
           logOut();
           Swal.fire({
-            icon: 'success',
-            title: 'Signed Out!',
-            text: 'You have been successfully signed out.',
+            icon: "success",
+            title: "Signed Out!",
+            text: "You have been successfully signed out.",
             showConfirmButton: false,
             timer: 1500,
-            position: 'top-end',
-            toast: true
+            position: "top-end",
+            toast: true,
           });
         }
       });
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
+        icon: "error",
+        title: "Oops...",
         text: error.message,
-        position: 'top-end',
+        position: "top-end",
         toast: true,
-        timer: 3000
+        timer: 3000,
       });
     }
   };
@@ -130,12 +130,16 @@ const Navbar = () => {
     if (user) {
       return (
         <div className="dropdown dropdown-end">
-          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle avatar"
+          >
             <div className="w-10 rounded-full">
               {user.photoURL ? (
-                <img 
-                  src={user.photoURL} 
-                  alt={user.displayName} 
+                <img
+                  src={user.photoURL}
+                  alt={user.displayName}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -145,9 +149,14 @@ const Navbar = () => {
               )}
             </div>
           </div>
-          <div tabIndex={0} className="dropdown-content z-[1] menu p-4 shadow bg-white rounded-box w-52 mt-2">
+          <div
+            tabIndex={0}
+            className="dropdown-content z-[1] menu p-4 shadow bg-white rounded-box w-52 mt-2"
+          >
             <div className="px-4 py-3 border-b">
-              <p className="text-sm font-medium text-gray-900">{user.displayName}</p>
+              <p className="text-sm font-medium text-gray-900">
+                {user.displayName}
+              </p>
               <p className="text-xs text-gray-500 truncate">{user.email}</p>
             </div>
             {/* Add Dashboard Link for Admin */}
@@ -227,7 +236,9 @@ const Navbar = () => {
           </div>
           {/* White Logo */}
           <img src="/logo.png" alt="Logo" width={35} height={35} />
-          <a className="btn btn-ghost text-2xl text-white">Cravey</a>
+          <Link to="/">
+            <a className="btn btn-ghost text-2xl text-white">Cravey</a>
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 bg-transparent">
@@ -239,7 +250,7 @@ const Navbar = () => {
           <Link to="/cart" className="btn btn-ghost btn-circle">
             <ShoppingCart className="h-6 w-6 text-white" />
           </Link>
-          
+
           {renderAuthButton()}
         </div>
       </div>
