@@ -5,7 +5,8 @@ import { LogOut, User, ShoppingCart } from "lucide-react";
 import Swal from 'sweetalert2';
 
 const Navbar = () => {
-  const { user, logOut, isAdmin } = useContext(AuthContext);
+  // Add loading state from AuthContext
+  const { user, logOut, isAdmin, loading } = useContext(AuthContext);
 
   const handleLogOut = async () => {
     try {
@@ -116,7 +117,16 @@ const Navbar = () => {
     }
   );
 
+  // Update renderAuthButton to handle loading state
   const renderAuthButton = () => {
+    if (loading) {
+      return (
+        <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center animate-pulse">
+          <div className="w-6 h-6 rounded-full border-2 border-t-transparent border-white animate-spin"></div>
+        </div>
+      );
+    }
+
     if (user) {
       return (
         <div className="dropdown dropdown-end">
