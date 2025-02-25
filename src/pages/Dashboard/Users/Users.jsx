@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, Loader2, UserCheck, Search } from 'lucide-react';
 import Swal from 'sweetalert2';
+import UserTableSkeleton from '../../../components/Skeletons/UserTableSkeleton';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -57,8 +58,10 @@ const Users = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-[400px]">
-                <Loader2 className="w-8 h-8 animate-spin text-[#0393B7]" />
+            <div className="container mx-auto p-2 sm:p-4">
+                <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                    <UserTableSkeleton />
+                </div>
             </div>
         );
     }
