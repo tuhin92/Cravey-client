@@ -23,6 +23,7 @@ import AuthProvider from "./Provider/AuthProvider";
 import AdminRoute from "./components/Routes/AdminRoute";
 import Users from "./pages/Dashboard/Users/Users";
 import PublicRoute from './components/Routes/PublicRoute';
+import NotFound from './pages/NotFound';
 
 // Create a root and render the App component
 const root = createRoot(document.getElementById("root"));
@@ -65,6 +66,7 @@ root.render(
             <Route path="update-product/:id" element={<Update />} />
             <Route path="users" element={<Users/> } />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </StrictMode>
