@@ -14,6 +14,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/typography": "^0.5.16",
     "@videojs/http-streaming": "^3.17.0",
+    "antd": "^5.24.2",
     "axios": "^1.7.9",
     "clsx": "^2.1.1",
     "firebase": "^11.3.1",
