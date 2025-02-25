@@ -3,12 +3,14 @@ import { Home, ShoppingCart, PlusSquare, Edit, Trash2, Users, Settings, LogOut, 
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const DashboardLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const { user, logOut } = useContext(AuthContext);
+  const [dbUser, setDbUser] = useState(null);
 
   // Close mobile menu when screen size increases
   useEffect(() => {
@@ -70,6 +72,25 @@ const DashboardLayout = () => {
       });
     }
   };
+
+  useEffect(() => {
+    const fetchUserFromDB = async () => {
+      if (user?.email) {
+        try {
+          const response = await axios.get(`http://localhost:5000/users`);
+          const users = response.data;
+          const currentUser = users.find(u => u.email === user.email);
+          if (currentUser) {
+            setDbUser(currentUser);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+
+    fetchUserFromDB();
+  }, [user]);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -148,11 +169,15 @@ const DashboardLayout = () => {
             <div className="relative group">
               <div className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-gray-100">
                 <div className="w-10 h-10 rounded-full overflow-hidden">
-                  {user?.photoURL ? (
+                  {dbUser?.photoURL ? (
                     <img 
-                      src={user.photoURL} 
-                      alt={user.displayName} 
+                      src={dbUser.photoURL} 
+                      alt={dbUser.name} 
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.src = '/default-avatar.png';
+                        e.target.onerror = null;
+                      }}
                     />
                   ) : (
                     <div className="bg-[#0381A1] w-full h-full flex items-center justify-center">
@@ -161,16 +186,16 @@ const DashboardLayout = () => {
                   )}
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-medium text-gray-700">{user?.displayName}</p>
-                  <p className="text-xs text-gray-500">{user?.email}</p>
+                  <p className="text-sm font-medium text-gray-700">{dbUser?.name}</p>
+                  <p className="text-xs text-gray-500">{dbUser?.email}</p>
                 </div>
               </div>
 
               {/* Dropdown Menu */}
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200">
                 <div className="px-4 py-2 border-b md:hidden">
-                  <p className="text-sm font-medium text-gray-700">{user?.displayName}</p>
-                  <p className="text-xs text-gray-500">{user?.email}</p>
+                  <p className="text-sm font-medium text-gray-700">{dbUser?.name}</p>
+                  <p className="text-xs text-gray-500">{dbUser?.email}</p>
                 </div>
                 <button
                   onClick={handleLogOut}
