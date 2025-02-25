@@ -13,6 +13,7 @@ import {
   FaAward,
   FaClock,
 } from "react-icons/fa";
+import Mission from "../../components/About/Mission";
 
 const About = () => {
   const navigate = useNavigate();
@@ -33,25 +34,10 @@ const About = () => {
   return (
     <>
       <HelmetWrapper title="Cravey | About Us" />
-      
       {/* Hero Section with Parallax Effect */}
       <Hero />
       {/* Mission Statement */}
-      <motion.div 
-        className="py-16 bg-white"
-        initial={fadeIn.initial}
-        whileInView={fadeIn.animate}
-        viewport={{ once: true }}
-      >
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            At Cravey, we're passionate about delivering not just food, but experiences. 
-            Every dish we prepare is a testament to our commitment to quality, freshness, and taste.
-          </p>
-        </div>
-      </motion.div>
-
+      <Mission />
       {/* Features Grid with Animation */}
       <Features />
       
