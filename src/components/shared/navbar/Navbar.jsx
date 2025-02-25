@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import { LogOut, User, ShoppingCart } from "lucide-react";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const Navbar = () => {
-  // Add loading state from AuthContext
   const { user, logOut, isAdmin, loading } = useContext(AuthContext);
+  const [dbUser, setDbUser] = useState(null);
 
   const handleLogOut = async () => {
     try {
@@ -43,6 +44,26 @@ const Navbar = () => {
       });
     }
   };
+
+  // Add useEffect to fetch user data
+  useEffect(() => {
+    const fetchUserFromDB = async () => {
+      if (user?.email) {
+        try {
+          const response = await axios.get(`http://localhost:5000/users`);
+          const users = response.data;
+          const currentUser = users.find(u => u.email === user.email);
+          if (currentUser) {
+            setDbUser(currentUser);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+
+    fetchUserFromDB();
+  }, [user]);
 
   // Orange color styling for active links
   const getLinkClass = ({ isActive }) => {
@@ -127,7 +148,7 @@ const Navbar = () => {
       );
     }
 
-    if (user) {
+    if (user && dbUser) {
       return (
         <div className="dropdown dropdown-end">
           <div
@@ -135,15 +156,19 @@ const Navbar = () => {
             role="button"
             className="btn btn-ghost btn-circle avatar"
           >
-            <div className="w-10 rounded-full">
-              {user.photoURL ? (
+            <div className="w-10 rounded-full ring-2 ring-white/10">
+              {dbUser.photoURL ? (
                 <img
-                  src={user.photoURL}
-                  alt={user.displayName}
-                  className="w-full h-full object-cover"
+                  src={dbUser.photoURL}
+                  alt={dbUser.name}
+                  className="w-full h-full object-cover rounded-full"
+                  onError={(e) => {
+                    e.target.src = '/default-avatar.png';
+                    e.target.onerror = null;
+                  }}
                 />
               ) : (
-                <div className="bg-[#0381A1] w-full h-full flex items-center justify-center">
+                <div className="bg-[#0381A1] w-full h-full flex items-center justify-center rounded-full">
                   <User className="w-6 h-6 text-white" />
                 </div>
               )}
@@ -155,9 +180,9 @@ const Navbar = () => {
           >
             <div className="px-4 py-3 border-b">
               <p className="text-sm font-medium text-gray-900">
-                {user.displayName}
+                {dbUser.name}
               </p>
-              <p className="text-xs text-gray-500 truncate">{user.email}</p>
+              <p className="text-xs text-gray-500 truncate">{dbUser.email}</p>
             </div>
             {/* Add Dashboard Link for Admin */}
             {isAdmin && (
