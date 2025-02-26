@@ -48,7 +48,7 @@ const Footer = () => {
               <h2 className="text-xl sm:text-2xl font-bold text-white">Cravey</h2>
             </div>
             <p className="text-sm leading-relaxed text-gray-400 mb-6 max-w-md">
-              Your all-in-one fitness store providing quality equipment and workout solutions to help you reach your fitness goals.
+              Your premium grocery store offering fresh, high-quality food products. Discover a wide selection of delicious ingredients to satisfy your cravings.
             </p>
             <div className="flex space-x-3 sm:space-x-4">
               {socialLinks.map(({ icon: Icon, href, label }) => (
@@ -66,18 +66,34 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links - Better on small screens */}
+          {/* Quick Links - Updated paths */}
           <div className="col-span-1 sm:col-span-1 lg:col-span-2">
             <h3 className="text-sm font-bold mb-3 sm:mb-4 text-white uppercase tracking-wider">Quick Links</h3>
             <ul className="space-y-2 sm:space-y-3">
-              {['Home', 'About Us', 'Products', 'Reviews'].map(link => (
-                <li key={link}>
-                  <Link to={`/${link.toLowerCase().replace(' ', '-')}`} 
-                        className="text-gray-400 hover:text-[#ff6b6b] transition-colors text-xs sm:text-sm inline-block">
-                    {link}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link to="/" 
+                      className="text-gray-400 hover:text-[#ff6b6b] transition-colors text-xs sm:text-sm inline-block">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" 
+                      className="text-gray-400 hover:text-[#ff6b6b] transition-colors text-xs sm:text-sm inline-block">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/shop" 
+                      className="text-gray-400 hover:text-[#ff6b6b] transition-colors text-xs sm:text-sm inline-block">
+                  Products
+                </Link>
+              </li>
+              <li>
+                <Link to="/reviews" 
+                      className="text-gray-400 hover:text-[#ff6b6b] transition-colors text-xs sm:text-sm inline-block">
+                  Reviews
+                </Link>
+              </li>
             </ul>
           </div>
 
