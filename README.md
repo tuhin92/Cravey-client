@@ -1,8 +1,29 @@
-# React + Vite
+# 🍽️ Cravey – Online Food-Making & Delivery Service  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Cravey is a modern **food-making and delivery service** that provides users with a seamless and enjoyable food-ordering experience. Whether you're craving homemade meals or restaurant-quality dishes, Cravey makes it easy to browse, order, and enjoy fresh food delivered straight to your doorstep.  
 
-Currently, two official plugins are available:
+## 🚀 Features  
+- 🍔 **Browse & Order** – Discover a variety of delicious meals and place orders effortlessly.  
+- 🔐 **Secure Authentication** – Sign up and log in with Firebase authentication.  
+- 📦 **Real-Time Order Tracking** – Stay updated on the status of your food orders.  
+- 🎨 **Modern UI** – Built with **Tailwind CSS, DaisyUI, Ant Design, and Aceternity UI** for a smooth user experience.  
+- 🌍 **Fully Responsive** – Works across all devices for a seamless experience.  
+- ⚡ **Optimized Performance** – Fast and scalable backend powered by **Node.js & Express.js**.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Tech Stack  
+**Frontend:** React.js | Vite | Tailwind CSS | DaisyUI | Ant Design | Aceternity UI  
+**Backend:** Node.js | Express.js | MongoDB  
+**Authentication & Hosting:** Firebase  
+
+## 📸 Screenshots  
+![Cravey Homepage](./screenshots/homepage.png)  
+![Cravey Order Page](./screenshots/order-page.png)  
+
+## 🔧 Installation & Setup  
+
+1️⃣ Clone the repository:  
+```sh
+https://github.com/tuhin92/Cravey-client.git
+cd cravey
+npm i
+npm run dev
